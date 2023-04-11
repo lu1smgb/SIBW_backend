@@ -1,0 +1,104 @@
+<!--
+    Página que contiene la biografía de un científico (versión para imprimir)
+
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
+
+    @lu1smgb on GitHub
+-->
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<!-- CABECERA HTML: Metadatos de la página -->
+<head>
+    <!--Codificación del texto-->
+    <meta charset="utf-8">
+    <!--La página se adapta al ancho de la pantalla-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Palabras clave, descripción y autor del sitio-->
+    <meta name="keywords" content="cientifico, biografia, ciencia">
+    <meta name="description" content="Conoce a las personas que cambiaron el mundo">
+    <meta name="author" content="lu1smgb">
+    <!--Titulo, CSS e icono en el navegador-->
+    <title>Biografias de 100cia</title>
+    <link rel="stylesheet" href="../assets/css/imprimir.css">
+    <link rel="icon" href="../assets/images/logotipo.gif">
+</head>
+
+<!-- CUERPO HTML: Contenido de la página -->
+<body>
+
+    <div id="main">
+
+        <!-- CABECERA -->
+        <header>
+
+            <!-- Logotipo -->
+            <img id="logotipo" src="../assets/images/logotipo.gif" alt="Logotipo">
+
+            <!-- Título y seccion de menús -->
+            <h1>Biografias de 100cia</h1>
+            <nav>
+                <button type="button">Menu 1</button>
+                <button type="button">Menu 2</button>
+                <button type="button">Menu 3</button>
+            </nav>  
+
+        </header>
+
+        <!-- CUERPO -->
+        <div id="cuerpo">
+
+            <!-- Panel de cientificos -->
+            <!-- Puede ser un menú o una biografía -->
+            <div id="panel-biografia">
+
+                <!-- Imagenes adjuntas a la biografia -->
+                <div class="pila-imagenes">
+                    <div class="cientifico">
+                        <img src="../assets/images/albert_einstein.jpg" alt="img1">
+                        <p>Pie de imagen 1</p>
+                    </div>
+                    <div class="cientifico">
+                        <img src="../assets/images/albert_einstein2.jpg" alt="img2">
+                        <p>Pie de imagen 2</p>
+                    </div>
+                </div>
+                
+                <h2>{{ nombre }}</h2>
+                <h3>{{ fechaNacimiento }} - {{ fechaDefuncion }}</h3>
+                <h4>{{ lugarOrigen }}</h4>
+                <p>Biografía</p>
+
+                <!-- Botones sociales -->
+                <!-- FB, TW e Imprimir -->
+                <div class="botones-sociales">
+                    <button type="button">Facebook</button>
+                    <button type="button">Twitter</button>
+                    <button type="button" onclick="location.href = '../cientifico_imprimir.php';">Imprimir</button>
+                </div>
+            </div>
+
+            <!-- Panel lateral -->
+            <!-- Contiene enlaces de interés relacionados con la web -->
+            <aside>
+                <p>Gracias a <a href="https://chat.openai.com">ChatGPT-3</a> por generar esta biografía</p>
+                <p>Imágenes sacadas de <a href="">Wikipedia</a></p>
+            </aside>
+
+        </div>
+
+        <!-- PIE DE PÁGINA -->
+        <footer>
+            <a href="https://github.com/lu1smgb">
+                &copy; 2023 - Luis Miguel Guirado Bautista - lu1smgb en GitHub 😎🌯 
+            </a>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

@@ -76,6 +76,15 @@
     $loader = new \Twig\Loader\FilesystemLoader('templates');
     $twig = new \Twig\Environment($loader);
 
-    echo $twig->render('index.html', []);
+    if ($_GET['nombre'] == 'ae') {
+        // ...
+    }
+
+    echo $twig->render('cientifico.html', [
+        "nombre" => "Albert Einstein",
+        "fechaNacimiento" => "01/01/2001",
+        "fechaDefuncion" => "01/01/2001",
+        "lugarOrigen" => "Alemania"
+    ]);
 
 ?>
