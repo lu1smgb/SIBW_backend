@@ -1,4 +1,4 @@
-# LAMP stack built with Docker Compose
+<!-- # LAMP stack built with Docker Compose
 
 ![Landing Page](https://user-images.githubusercontent.com/43859895/141092846-905eae39-0169-4fd7-911f-9ff32c48b7e8.png)
 
@@ -291,4 +291,10 @@ We want to empower developers to quickly create creative Applications. Therefore
 In Production you should modify at a minimum the following subjects:
 
 - php handler: mod_php=> php-fpm
-- secure mysql users with proper source IP limitations
+- secure mysql users with proper source IP limitations -->
+
+# SIBW
+
+## Repositorio de las prácticas con el backend (Servidor de PHP y MySQL)
+
+Añadida la librería de generación de plantillas TWIG
