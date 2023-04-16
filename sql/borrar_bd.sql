@@ -1,0 +1,7 @@
+DELETE FROM Cientifico;
+DELETE FROM Pais;
+DELETE FROM Imagen;
+
+DROP TABLE Cientifico;
+DROP TABLE Pais;
+DROP TABLE Imagen;
