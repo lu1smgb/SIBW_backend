@@ -1,5 +1,12 @@
 /*
+    Hoja de estilos CSS para la biografia (versión para imprimir)
 
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
+
+    https://github.com/lu1smgb/SIBW
 */
 
 /** Fuente por defecto y ancho de los bordes para toda la página */
@@ -54,15 +61,20 @@
     display: none;
 }
 
+#main #cuerpo #panel-biografia {
+    justify-content: center;
+}
+
 #main #cuerpo #panel-biografia .pila-imagenes {
     /* Una columna flex a la derecha del texto */
     display: flex;
     flex-direction: column;
+    text-align: center;
     align-items: center;
 }
 
 #main #cuerpo #panel-biografia .botones-sociales {
-    visibility: hidden;
+    display: none;
 }
 
 .cientifico img {
@@ -70,4 +82,8 @@
     height: 150px;
     /* La imagen original mantiene su relación de aspecto */
     object-fit: cover;
+}
+
+#panel-comentarios {
+    display:none;
 }

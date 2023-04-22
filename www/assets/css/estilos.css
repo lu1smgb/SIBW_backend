@@ -1,14 +1,12 @@
 /*
-    Hoja de estilos CSS para los ficheros:
-    - portada.html (index.html)
-    - <cientifico>.html
+    Hoja de estilos CSS para la plantilla base
 
     Prácticas de SIBW
     Curso 2022/2023
     Autor: Luis Miguel Guirado Bautista
     Universidad de Granada
 
-    @lu1smgb on GitHub
+    https://github.com/lu1smgb/SIBW
 */
 
 /** Fuente por defecto y ancho de los bordes para toda la página */
@@ -48,6 +46,10 @@ a {
     /* El paso entre estados no es inmediato */
     transition: 0.4s;
 
+}
+
+header a {
+    transition: none;
 }
 
 /** Enlaces no visitados */
@@ -424,7 +426,6 @@ button {
     height: 90%;
 
     /* Pegado a la derecha */
-    /*! Cambiar dimensiones y posición en vista móvil */
     position: absolute;
     top:6px;
     right:0;
@@ -482,10 +483,11 @@ button {
 }
 
 /* Estilo general para todos los campos */
-#panel-comentarios #form-comentarios #nombre-email input, textarea {
+#panel-comentarios #form-comentarios input, textarea {
     background-color: #666666;
     color: #f0f0f0;
     text-shadow: none;
+    border-style: solid;
     border-radius: 1ch;
 }
 
@@ -506,10 +508,6 @@ button {
 
     font-size: 0.9rem;
     padding:1ch;
-}
-
-#panel-comentarios #form-comentarios button {
-    width: min-content;
 }
 
 /*************************************************** -------------------- ***************************************************/
