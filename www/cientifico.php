@@ -1,29 +1,54 @@
 <?php
 
-    // Libreria TWIG
-    require_once "/usr/local/lib/php/vendor/autoload.php";
+/*
 
-    // Controlador
-    include ("bd.php");
+    Fichero PHP encargado de renderizar la página de la biografía
 
-    $loader = new \Twig\Loader\FilesystemLoader('templates');
-    $twig = new \Twig\Environment($loader);
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
 
-    // TODO: Intentar usar URLS limpias
-    $var = $_GET['nombre'];
-    if (isset($var) && gettype($var) == 'string') {
-        $nombre = $var;
-    }
-    else {
-        $nombre = null;
-    }
+    https://github.com/lu1smgb/SIBW
+    
+*/
 
-    $usuario = 'usuario';
-    $contrasena = 'usuario';
-    $conexion = conectar($usuario, $contrasena);
-    $datos = getCientifico($conexion, $nombre);
-    $imagenes = getFotosCientifico($conexion, $nombre);
+require_once "/usr/local/lib/php/vendor/autoload.php";
+include ("bd.php");
 
-    echo $twig->render('cientifico.html', [ 'datos' => $datos, "imagenes" => $imagenes ]);
+$loader = new \Twig\Loader\FilesystemLoader('assets/templates');
+$twig = new \Twig\Environment($loader);
+
+// TODO: Intentar usar URLS limpias
+$nombre = $_GET['nombre'];
+
+$conexion = conectar('usuario', 'usuario');
+
+$datos = array(
+    'cientifico' => null,
+    'sociales' => null,
+    'imagenes' => null,
+    'comentarios' => null,
+    'palabras' => null
+);
+
+$datos['cientifico'] = getCientifico($conexion, $nombre);
+
+if ($datos['cientifico'] == null) {
+    $datos['cientifico'] = array(
+        'nombre' => 'Error',
+        'biografia' => 'El científico solicitado no existe, pruebe con otro'
+    );
+}
+else {
+    $datos['sociales'] = getSociales($conexion, $nombre);
+    $datos['imagenes'] = getFotosCientifico($conexion, $nombre);
+    $datos['comentarios'] = getComentarios($conexion, $nombre);
+    $datos['palabras'] = getPalabrasProhibidas($conexion);
+}
+
+echo $twig->render('cientifico.twig', [
+    'datos' => $datos, 'menus' => $menus
+]);
 
 ?>

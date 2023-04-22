@@ -1,21 +1,27 @@
 <?php
 
-    // Con este código cargamos una página HTML
+/*
+    Fichero PHP encargado de renderizar la página principal
 
-    # Libreria TWIG
-    require_once "/usr/local/lib/php/vendor/autoload.php";
-    include("bd.php");
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
 
-    $loader = new \Twig\Loader\FilesystemLoader('templates');
-    $twig = new \Twig\Environment($loader);
+    https://github.com/lu1smgb/SIBW
+*/
 
-    // TODO: Hacer el menu con respecto a la base de datos
+require_once "/usr/local/lib/php/vendor/autoload.php";
+include("bd.php");
 
-    $usuario = 'usuario';
-    $contrasena = 'usuario';
-    $conexion = conectar($usuario, $contrasena);
-    $datos = getMenu($conexion);
+$loader = new \Twig\Loader\FilesystemLoader('assets/templates');
+$twig = new \Twig\Environment($loader);
 
-    echo $twig->render('index.html', [ "datos" => $datos ]);
+$usuario = 'usuario';
+$contrasena = 'usuario';
+$conexion = conectar($usuario, $contrasena);
+$datos = getMenu($conexion);
+
+echo $twig->render('index.twig', [ "datos" => $datos, "menus" => $menus ]);
 
 ?>
