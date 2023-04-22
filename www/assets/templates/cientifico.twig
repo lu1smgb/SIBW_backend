@@ -1,0 +1,88 @@
+{#
+
+    Plantilla para la página de la biografía
+    Hija de "base.html"
+
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
+
+    https://github.com/lu1smgb/SIBW
+
+#}
+
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        const banned = {{ datos.palabras | json_encode | raw }};
+    </script>
+    <script src="../assets/js/PanelComentarios.js" defer></script>
+{% endblock %}
+
+{% block seccionMenus %}
+    {{ parent() }}
+{% endblock %}
+
+{% block panelPrincipal %}
+    <!-- Panel de cientificos -->
+    <div id="panel-biografia">
+
+        <!-- Imagenes adjuntas a la biografia -->
+        <div class="pila-imagenes">
+            {% for imagen in datos.imagenes %}
+            <div class="cientifico">
+                <img src="../assets/images/{{ imagen.enlace }}" alt="{{ imagen.enlace }}">
+                <p>{{ imagen.descripcion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <h2>{{ datos.cientifico.nombre }}</h2>
+        <h3>{{ datos.cientifico.fechaNacimiento }} - {{ datos.cientifico.fechaDefuncion }}</h3>
+        <h4>{{ datos.cientifico.lugarOrigen }}</h4>
+        <p>{{ datos.cientifico.biografia }}</p> <!-- Todo el contenido queda en un parrafo? -->
+
+        <!-- Botones sociales -->
+        <!-- FB, TW e Imprimir -->
+        <div class="botones-sociales">
+            {% for social in datos.sociales %}
+                <button type="button" onclick="location.href = '{{ social.enlace }}'">{{ social.nombre }}</button>
+            {% endfor %}
+            <button type="button" onclick="location.href = '../cientifico_imprimir.php?nombre={{ datos.cientifico.nombre }}';">Imprimir</button>
+            <button type="button" id="boton-comentarios"><img src="../assets/images/comentarios.gif"></button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block panelLateral %}
+    {# TODO CAMBIAR #}
+    <p>Gracias a <a href="https://chat.openai.com">ChatGPT-3</a> por generar esta biografía</p>
+    <p>Imágenes sacadas de <a href="">Wikipedia</a></p>
+{% endblock %}
+
+{% block panelComentarios %}
+    <div id="panel-comentarios">
+        <strong id="contador-comentarios">- comentarios</strong>
+        <div id="vista-comentarios">
+            <!-- Lista de comentarios -->
+            {% for comentario in datos.comentarios %}
+            <div class="comentario">
+                <strong class="nombre">{{ comentario.nombre }}</strong>
+                <strong class="fecha">{{ comentario.fecha }}</strong>
+                <p class="texto">{{ comentario.texto }}</p>
+            </div> 
+            {% endfor %}
+        </div>
+        <form id="form-comentarios" name="form-comentarios" {# action="cientifico.php?nombre={{ datos.cientifico.nombre }}" #} method="post">
+            <strong>Publica tu comentario</strong>
+            <div id="nombre-email">
+                <input type="text" name="nombre" placeholder="Nombre (8-32 caracteres)">
+                <input type="email" name="email" placeholder="Email">
+            </div>
+            <textarea name="texto" placeholder="Escribe aquí..."></textarea>
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{#
+
+    Plantilla para el científico (versión para imprimir)
+    Hija de "cientifico.twig"
+
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
+
+    https://github.com/lu1smgb/SIBW
+
+#}
+
+{% extends "cientifico.twig" %}
+
+{# Solo cambia el estilo con respecto a la plantilla cientifico.twig #}
+{% block estilo %}
+    <link rel="stylesheet" href="../assets/css/imprimir.css">
+{% endblock %}

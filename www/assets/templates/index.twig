@@ -1,0 +1,38 @@
+{#
+
+    Plantilla para el menú principal
+    Hija de "base.html"
+
+    Prácticas de SIBW
+    Curso 2022/2023
+    Autor: Luis Miguel Guirado Bautista
+    Universidad de Granada
+
+    https://github.com/lu1smgb/SIBW
+
+#}
+
+{% extends "base.html" %}
+
+{% block seccionMenus %}
+    {{ parent() }}
+{% endblock %}
+
+{% block panelPrincipal %}
+    <div id="panel-cientificos">
+        {% for cientifico in datos %}
+            <a class="cientifico" href="../cientifico.php?nombre={{ cientifico.nombre }}">
+                <img src="../assets/images/{{ cientifico.portada }}" alt="{{ cientifico.nombre }}">
+                <p>{{ cientifico.nombre }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block panelLateral %}
+    <p>Este es el panel lateral, aquí encontrarás referencias para obtener más información acerca de los científicos</p>
+    <p>Haz clic en uno de los recuadros a tu izquierda que contienen a un científico para acceder a su bibliografía correspondiente</p>
+    <p>Todas las fotos usadas para la web tienen licencia Creative Commons</p>
+    <p>El fondo de pantalla ha sido generado por <a href="https://svgbackgrounds.com">svgbackgrounds.com</a></p>
+    <p>El logotipo ha sido generado por <a href="https://lordicon.com">lordicon.com</a></p>
+{% endblock %}
