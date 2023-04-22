@@ -55,19 +55,8 @@ function actualizarContador() {
 // Se encarga de censurar las palabras prohibidas
 function censurarContenido() {
 
-    // Array con las palabras prohibidas (son ligeras)
-    const banned = [
-        'tonto',
-        'tonta',
-        'recorcholis',
-        'caracoles',
-        'flautas',
-        'repampanos',
-        'cielos',
-        'cipote',
-        'cipota',
-        'fifa'
-    ];
+    // Las palabras prohibidas ahora se encuentran en la base de datos (tabla PalabraProhibida)
+    // Podemos encontrar la declaración de la variable que las contiene en el fichero de la plantilla (cientifico.twig)
 
     // Obtenemos el contenido del comentario
     const domContent = document.querySelector("#form-comentarios")
@@ -97,9 +86,11 @@ function censurarContenido() {
 
 }
 
-// Agrega un comentario a la lista de comentarios
-function agregarComentario(comm) {
+// Verifica que un comentario pueda publicarse desde el lado del cliente
+function enviarComentario(event) {
 
+    const comm = datosFormulario();
+    var log = [];
     // Expresión regular para detectar correos electrónicos válidos
     // https://www.w3resource.com/javascript/form/email-validation.php
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -107,22 +98,28 @@ function agregarComentario(comm) {
     // --- Excepciones --------------------------------------------------------
 
     // Si no se ha introducido nombre, saltará un error
-    if (comm.nombre.length == 0) {
-        throw new Error("\nEl campo del nombre está vacío (8 caracteres mínimo)")
+    if (comm.nombre.length < 8 || comm.nombre.length > 32) {
+        log.push("El campo del nombre no es válido");
     }
 
     // Si el email introducido no es válido
     if (!emailRegex.test(comm.email)) {
-        throw new Error("\nEl email introducido no es válido");
+        log.push("El email introducido no es válido");
     }
 
     // Si no hay nada en el contenido del comentario
     if (comm.content.length == 0) {
-        throw new Error("\nEl comentario está vacío");
+        log.push("El comentario está vacío");
     }
 
-    // ------------------------------------------------------------------------
+    // Si hay fallos en el comentario: Avisamos al usuario de los fallos
+    // y evitamos que la pagina se recargue
+    if (log.length != 0) {
+        window.alert(log.join('\n'));
+        event.preventDefault();
+    }
 
+    // * TEMPORAL HASTA LA PRACTICA DE PHP (II)
     // Si todo va bien, construimos el elemento HTML para guardar el comentario
 
     // Inicializamos el nuevo comentario
@@ -145,11 +142,10 @@ function agregarComentario(comm) {
                             month: "2-digit",
                             year: "numeric"
                         })
-                        + " - " +
+                        + " " +
                         date.toLocaleTimeString("es-ES",{
-                            hours: "2-digit",
-                            minutes: "2-digit",
-                            seconds: "none"
+                            hour: "2-digit",
+                            minute: "2-digit"
                         });
     nuevoComentario.appendChild(domDate);
     
@@ -163,22 +159,6 @@ function agregarComentario(comm) {
     var listaComentarios = document.getElementById("vista-comentarios");
     listaComentarios.appendChild(nuevoComentario);
 
-}
-
-// Función ejecutada por el botón de enviar comentario
-// Indica si el comentario del formulario se ha publicado correctamente
-function publicarComentario() {
-
-    // Probamos a agregar el comentario con los datos del formulario
-    try {
-        agregarComentario(datosFormulario());
-    }
-    // Si ocurre algún error, notificamos al usuario y paramos
-    catch (error) {
-        window.alert(error);
-        return false;
-    }
-
     // Actualizamos el contador
     actualizarContador();
 
@@ -188,7 +168,7 @@ function publicarComentario() {
     // Y avisamos al usuario
     window.alert("Tu comentario se ha publicado correctamente");
 
-    return true;
+    event.preventDefault();
 
 }
 
@@ -207,10 +187,7 @@ function init() {
     const formComentarios = document.getElementById("form-comentarios");
     const textbox = formComentarios.getElementsByTagName("textarea")[0];
     textbox.addEventListener("input", censurarContenido);
-
-    // Botón de publicar comentario
-    const botonEnviar = formComentarios.getElementsByTagName("button")[0];
-    botonEnviar.addEventListener("click", publicarComentario);
+    formComentarios.addEventListener("submit", enviarComentario);
 
 }
 
