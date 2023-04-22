@@ -43,6 +43,15 @@ CREATE TABLE Cientifico (
 
 );
 
+CREATE TABLE Menu (
+
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    enlace VARCHAR(150) NOT NULL,
+
+    PRIMARY KEY (nombre)
+
+);
+
 -- ENTIDAD Sociales (cada entrada representara un botón social)
 CREATE TABLE Social (
 
