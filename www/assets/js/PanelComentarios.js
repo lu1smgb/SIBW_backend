@@ -117,9 +117,14 @@ function enviarComentario(event) {
     if (log.length != 0) {
         window.alert(log.join('\n'));
         event.preventDefault();
+        return;
     }
 
     // * TEMPORAL HASTA LA PRACTICA DE PHP (II)
+    /**
+     * SE VERA QUE HAS PUBLICADO TU COMENTARIO, PERO SE BORRARAN TODOS LOS
+     * CAMBIOS UNA VEZ REFRESQUES LA PAGINA
+     */
     // Si todo va bien, construimos el elemento HTML para guardar el comentario
 
     // Inicializamos el nuevo comentario
