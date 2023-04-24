@@ -14,7 +14,6 @@ USE SIBW;
 CREATE TABLE Imagen (
 
     enlace VARCHAR(150) NOT NULL UNIQUE,
-    descripcion VARCHAR(100), -- Pie de imagen
 
     PRIMARY KEY (enlace) -- No habra enlaces repetidos
     
@@ -45,8 +44,8 @@ CREATE TABLE Cientifico (
 
 CREATE TABLE Menu (
 
-    nombre VARCHAR(100) NOT NULL UNIQUE,
-    enlace VARCHAR(150) NOT NULL,
+    nombre VARCHAR(100) NOT NULL UNIQUE, -- Nombre del boton
+    enlace VARCHAR(150) NOT NULL, -- Enlace a donde lleva
 
     PRIMARY KEY (nombre)
 
@@ -72,6 +71,7 @@ CREATE TABLE ImagenBiografia (
 
     id_cientifico INT NOT NULL,
     enlace VARCHAR(150) NOT NULL,
+    descripcion VARCHAR(100), -- Pie de imagen
 
     FOREIGN KEY (id_cientifico) REFERENCES Cientifico(id), -- id_cientifico -> Cientifico.id
     FOREIGN KEY (enlace) REFERENCES Imagen(enlace) -- enlace -> Imagen.enlace
@@ -113,6 +113,8 @@ CREATE TABLE Comentario (
 -- ENTIDAD Palabras prohibidas en los comentarios
 CREATE TABLE PalabraProhibida (
 
-    palabra VARCHAR(100) NOT NULL UNIQUE
+    palabra VARCHAR(100) NOT NULL UNIQUE,
+
+    PRIMARY KEY (palabra)
 
 );

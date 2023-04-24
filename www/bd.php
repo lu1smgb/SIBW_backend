@@ -168,7 +168,7 @@
     // (concretamente de la tabla ImagenBiografia)
     function getFotosCientifico(mysqli $conexion, string $nombre) {
 
-        $query = "SELECT Imagen.enlace, Imagen.descripcion FROM Imagen 
+        $query = "SELECT Imagen.enlace, ImagenBiografia.descripcion FROM Imagen 
                   INNER JOIN ImagenBiografia ON Imagen.enlace=ImagenBiografia.enlace 
                   WHERE ImagenBiografia.id_cientifico=" . getIdCientifico($conexion, $nombre);
         $res = $conexion->query($query);

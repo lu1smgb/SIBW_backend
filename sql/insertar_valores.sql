@@ -8,9 +8,9 @@
 -- https://github.com/lu1smgb/SIBW
 
 -- Imagen
-INSERT INTO Imagen(enlace) VALUES ('default.png');
-INSERT INTO Imagen(enlace, descripcion) VALUES ('albert_einstein.jpg', 'Tercera edad (1947)');
-INSERT INTO Imagen(enlace, descripcion) VALUES ('albert_einstein2.jpg', 'Foto en color');
+INSERT INTO Imagen VALUES ('default.png');
+INSERT INTO Imagen VALUES ('albert_einstein.jpg');
+INSERT INTO Imagen VALUES ('albert_einstein2.jpg');
 -- INSERT INTO Imagen(enlace, descripcion) VALUES ('...', '...');
 
 -- Cientifico
@@ -33,13 +33,15 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, lugarOrigen) VALUES (
     'La nada'
 );
 
+-- TODO: Insertar mas cientificos y borrar cientifico vacio
+
 -- Menu
 INSERT INTO Menu(nombre, enlace) VALUES ('Menu 1', 'index.php');
 
 -- ImagenBiografia
-INSERT INTO ImagenBiografia(id_cientifico, enlace) VALUES (1, 'albert_einstein.jpg');
-INSERT INTO ImagenBiografia(id_cientifico, enlace) VALUES (1, 'albert_einstein2.jpg');
--- INSERT INTO ImagenBiografia(id_cientifico, enlace) VALUES (..., '...');
+INSERT INTO ImagenBiografia(id_cientifico, enlace, descripcion) VALUES (1, 'albert_einstein.jpg', 'Tercera edad (1947)');
+INSERT INTO ImagenBiografia(id_cientifico, enlace, descripcion) VALUES (1, 'albert_einstein2.jpg', 'Foto en color');
+-- INSERT INTO ImagenBiografia(id_cientifico, enlace, descripcion) VALUES (..., '...', '...');
 
 -- Social
 INSERT INTO Social(id_cientifico, nombre, enlace) VALUES (1, "Wikipedia", "https://es.wikipedia.org/wiki/Albert_Einstein");
@@ -53,7 +55,7 @@ INSERT INTO Usuario(nombre, email) VALUES ('Usuario3', 'usuario3@example.com');
 
 -- Comentario
 INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (1,1,"Definitivamente es un cientifico");
-INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (2,1,"5mentarios", CURRENT_TIMESTAMP + 1);
+INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2,1,"5mentarios", CURRENT_TIMESTAMP + 1);
 INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (3,1,"Pero ese no es el nombre de una plaza?", CURRENT_TIMESTAMP + 5);
 INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2,1,"Hola mundo!", CURRENT_TIMESTAMP + 10);
 -- INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (...,...,"...");
