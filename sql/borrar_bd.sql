@@ -16,6 +16,7 @@ DELETE FROM Usuario;
 DELETE FROM ImagenBiografia;
 DELETE FROM Social;
 DELETE FROM Cientifico;
+DELETE FROM Menu;
 DELETE FROM Imagen;
 DELETE FROM PalabraProhibida;
 
@@ -25,5 +26,6 @@ DROP TABLE Usuario;
 DROP TABLE ImagenBiografia;
 DROP TABLE Social;
 DROP TABLE Cientifico;
+DROP TABLE Menu;
 DROP TABLE Imagen;
 DROP TABLE PalabraProhibida;
