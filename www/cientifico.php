@@ -13,42 +13,28 @@
     
 */
 
-require_once "/usr/local/lib/php/vendor/autoload.php";
-include ("bd.php");
+require "twig_load.php";
+require "conexion.php";
 
-$loader = new \Twig\Loader\FilesystemLoader('assets/templates');
-$twig = new \Twig\Environment($loader);
-
-// TODO: Intentar usar URLS limpias
-$nombre = $_GET['nombre'];
-
-$conexion = conectar('usuario', 'usuario');
-
-$datos = array(
-    'cientifico' => null,
-    'sociales' => null,
-    'imagenes' => null,
-    'comentarios' => null,
-    'palabras' => null
-);
-
-$datos['cientifico'] = getCientifico($conexion, $nombre);
-
-if ($datos['cientifico'] == null) {
-    $datos['cientifico'] = array(
-        'nombre' => 'Error',
-        'biografia' => 'El científico solicitado no existe, pruebe con otro'
-    );
-}
-else {
-    $datos['sociales'] = getSociales($conexion, $nombre);
-    $datos['imagenes'] = getFotosCientifico($conexion, $nombre);
-    $datos['comentarios'] = getComentarios($conexion, $nombre);
-    $datos['palabras'] = getPalabrasProhibidas($conexion);
+$id = 0;
+if (array_key_exists('id', $_GET)) {
+    $id = abs((int)$_GET['id']);
 }
 
-echo $twig->render('cientifico.twig', [
-    'datos' => $datos, 'menus' => $menus
-]);
+$imprimir = false;
+if (array_key_exists('imprimir', $_GET)) {
+    $imprimir = $_GET['imprimir'];
+    if ($imprimir == "true") {
+        $imprimir = true;
+    }
+    else {
+        $imprimir = false;
+    }
+}
+
+$connection = new Conexion();
+
+$data = $connection->getScientistInfo($id);
+echo $twig->render('cientifico.twig', ["id" => $id, "imprimir" => $imprimir, "data" => $data]);
 
 ?>

@@ -14,14 +14,10 @@
 
 {% extends "base.html" %}
 
-{% block seccionMenus %}
-    {{ parent() }}
-{% endblock %}
-
 {% block panelPrincipal %}
     <div id="panel-cientificos">
-        {% for cientifico in datos %}
-            <a class="cientifico" href="../cientifico.php?nombre={{ cientifico.nombre }}">
+        {% for cientifico in data.cientificos %}
+            <a class="cientifico" href="../cientifico.php?id={{ cientifico.id }}">
                 <img src="../assets/images/{{ cientifico.portada }}" alt="{{ cientifico.nombre }}">
                 <p>{{ cientifico.nombre }}</p>
             </a>

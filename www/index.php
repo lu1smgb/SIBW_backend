@@ -11,17 +11,12 @@
     https://github.com/lu1smgb/SIBW
 */
 
-require_once "/usr/local/lib/php/vendor/autoload.php";
-include("bd.php");
+require_once "twig_load.php";
+require_once "conexion.php";
 
-$loader = new \Twig\Loader\FilesystemLoader('assets/templates');
-$twig = new \Twig\Environment($loader);
+$connection = new Conexion();
+$data = $connection->getIndexInfo();
 
-$usuario = 'usuario';
-$contrasena = 'usuario';
-$conexion = conectar($usuario, $contrasena);
-$datos = getMenu($conexion);
-
-echo $twig->render('index.twig', [ "datos" => $datos, "menus" => $menus ]);
+echo $twig->render('index.twig', [ "data" => $data ]);
 
 ?>

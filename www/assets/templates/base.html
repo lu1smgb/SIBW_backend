@@ -46,7 +46,7 @@
             <!-- Titulo y seccion de menús -->
             <h1>Biografias de 100cia</h1>
             <nav>
-                {% for menu in menus %}
+                {% for menu in data.menus %}
                     <button type="button" onclick="location.href = '{{menu.enlace}}';">{{ menu.nombre }}</button>
                 {% endfor %}
             </nav>
