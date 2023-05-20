@@ -293,8 +293,7 @@ In Production you should modify at a minimum the following subjects:
 - php handler: mod_php=> php-fpm
 - secure mysql users with proper source IP limitations -->
 
-# SIBW
+# Sistemas de Información Basados en Web
 
-## Repositorio de las prácticas con el backend (Servidor de PHP y MySQL)
-
-Añadida la librería de generación de plantillas TWIG
+Repositorio de las prácticas con el backend
+Servidor de PHP y MySQL con motor de plantillas TWIG
