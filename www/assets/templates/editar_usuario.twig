@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+    <div id="panel-biografia">
+        {% for error in errors %}
+            <p style="color: #f00;">{{error}}</p>
+        {% endfor %}
+        <!-- Puede modificar el nombre, el email y la contraseña -->
+        {% if data.user != null %}
+        <h1>Editar información personal</h1>
+        <form action="../editar_usuario.php" method="post">
+            Nombre de usuario (8-32 caracteres):<br>
+            <input type="text" name="nombre" value="{{ data.user.nombre }}"><br>
+            Correo electrónico:<br>
+            <input type="email" name="email" value="{{ data.user.email }}"><br>
+            Nueva contraseña (opcional):<br>
+            <input type="password" name="password"><br>
+            Repita nueva contraseña (opcional):<br>
+            <input type="password" name="repeat_pwd"><br>
+            Para guardar los cambios, introduzca su contraseña actual:<br>
+            <input type="password" name="old_pwd"><br>
+            <input type="submit" value="Cambiar">
+        </form>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+    <div id="panel-biografia">
+        <h1>Login</h1>
+        {% for error in errors %}
+            <p style="color: #f00;">{{error}}</p>
+        {% endfor %}
+        <form action="../login.php" method="post">
+            Correo electrónico:<br>
+            <input type="email" name="email"><br>
+            Contraseña:<br>
+            <input type="password" name="password"><br>
+            <input type="submit" value="Entrar">
+        </form>
+    </div>
+{% endblock %}
+
+{% block panelLateral %}
+
+{% endblock %}

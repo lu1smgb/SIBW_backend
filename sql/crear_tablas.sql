@@ -42,6 +42,17 @@ CREATE TABLE Cientifico (
 
 );
 
+-- RELACION HashtagCientifico
+CREATE TABLE HashtagCientifico (
+
+    id_cientifico INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+
+    -- Un mismo cientifico no puede tener hashtags duplicados
+    PRIMARY KEY(id_cientifico, nombre)
+
+);
+
 CREATE TABLE Menu (
 
     nombre VARCHAR(100) NOT NULL UNIQUE, -- Nombre del boton
@@ -78,29 +89,44 @@ CREATE TABLE ImagenBiografia (
 
 );
 
+CREATE TABLE TipoUsuario (
+
+-- Importante tener en cuenta que los usuarios no registrados no tienen un tipo especifico en el modelo
+    tipo VARCHAR(100) NOT NULL UNIQUE
+
+);
+
+
 -- ENTIDAD: Usuario (usuario registrado capaz de realizar comentarios)
 CREATE TABLE Usuario (
 
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    pwd VARCHAR(255) NOT NULL, -- Normalmente este campo estará ENCRIPTADO (MD5)
+    tipo VARCHAR(100) DEFAULT 'Usuario',
 
     PRIMARY KEY (id,email), -- No puede haber dos usuarios con el mismo id o con el mismo email
 
     -- !!! El nombre de usuario tiene entre 8 y 32 caracteres !!!
     CONSTRAINT nombre_min_caracteres CHECK (CHAR_LENGTH(nombre) BETWEEN 8 AND 32),
     -- El email tendrá que cumplir una expresión regular
-    CONSTRAINT email_valido CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+    CONSTRAINT email_valido CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+    -- El tipo de usuario tendra que ser uno de los de la tabla TipoUsuario
+    FOREIGN KEY (tipo) REFERENCES TipoUsuario(tipo)
 
 );
 
 -- RELACION Usuario-Cientifico N:M para los comentarios
 CREATE TABLE Comentario (
 
+    id INT NOT NULL UNIQUE AUTO_INCREMENT,
     id_usuario INT NOT NULL,
     id_cientifico INT NOT NULL,
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     texto TEXT NOT NULL, -- 65,535 caracteres
+
+    PRIMARY KEY (id),
 
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id), -- id_usuario -> Usuario.id
     FOREIGN KEY (id_cientifico) REFERENCES Cientifico(id), -- id_cientifico -> Cientifico.id

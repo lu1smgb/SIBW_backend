@@ -29,10 +29,6 @@
     <script src="../assets/js/PanelComentarios.js" defer></script>
 {% endblock %}
 
-{% block seccionMenus %}
-    {{ parent() }}
-{% endblock %}
-
 {% block panelPrincipal %}
     <!-- Panel de cientificos -->
     <div id="panel-biografia">
@@ -58,16 +54,10 @@
             {% for social in data.sociales %}
                 <button type="button" onclick="location.href = '{{ social.enlace }}'">{{ social.nombre }}</button>
             {% endfor %}
-            <button type="button" onclick="location.href = '../cientifico.php?id={{ id }}&imprimir=true';">Imprimir</button>
+            <button type="button" onclick="location.href = '../cientifico.php?id={{ data.id }}&imprimir=true';">Imprimir</button>
             <button type="button" id="boton-comentarios"><img src="../assets/images/comentarios.gif"></button>
         </div>
     </div>
-{% endblock %}
-
-{% block panelLateral %}
-    {# TODO CAMBIAR (Añadir columna en la tabla de la biografia) #}
-    <p>Gracias a <a href="https://chat.openai.com">ChatGPT-3</a> por generar esta biografía</p>
-    <p>Imágenes sacadas de <a href="">Wikipedia</a></p>
 {% endblock %}
 
 {% block panelComentarios %}
@@ -80,10 +70,20 @@
                 <strong class="nombre">{{ comentario.nombre }}</strong>
                 <strong class="fecha">{{ comentario.fecha }}</strong>
                 <p class="texto">{{ comentario.texto }}</p>
+                {% if data.user.tipo == 'Moderador' or data.user.tipo == 'Administrador' or data.user.email == comentario.email %}
+                <div class="botones-comentarios">
+                    <a href="editar_comentario.php?id={{ comentario.id }}">
+                        <img src="assets/images/edit.png" alt="Editar comentario">
+                    </a>
+                    <a href="borrar_comentario.php?id={{ comentario.id }}">
+                        <img src="assets/images/delete.png" alt="Borrar comentario">
+                    </a>
+                </div>
+                {% endif %}
             </div> 
             {% endfor %}
         </div>
-        <form id="form-comentarios" name="form-comentarios" {# action="cientifico.php?nombre={{ data.cientifico.nombre }}" #} method="post">
+        <form id="form-comentarios" name="form-comentarios" method="post">
             <strong>Publica tu comentario</strong>
             <div id="nombre-email">
                 <input type="text" name="nombre" placeholder="Nombre (8-32 caracteres)">

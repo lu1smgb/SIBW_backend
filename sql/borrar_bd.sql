@@ -9,23 +9,4 @@
 
 -- Base de datos en la que se ejecutará la consulta
 USE SIBW;
-
--- Borramos los datos de las tablas
-DELETE FROM Comentario;
-DELETE FROM Usuario;
-DELETE FROM ImagenBiografia;
-DELETE FROM Social;
-DELETE FROM Cientifico;
-DELETE FROM Menu;
-DELETE FROM Imagen;
-DELETE FROM PalabraProhibida;
-
--- Eliminamos las tablas
-DROP TABLE Comentario;
-DROP TABLE Usuario;
-DROP TABLE ImagenBiografia;
-DROP TABLE Social;
-DROP TABLE Cientifico;
-DROP TABLE Menu;
-DROP TABLE Imagen;
-DROP TABLE PalabraProhibida;
+DROP TABLE `Cientifico`, `Comentario`, `HashtagCientifico`, `Imagen`, `ImagenBiografia`, `Menu`, `PalabraProhibida`, `Social`, `TipoUsuario`, `Usuario`;

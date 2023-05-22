@@ -68,7 +68,15 @@
             <!-- Contiene enlaces de interés relacionados con la web -->
             <aside>
                 {% block panelLateral %}
-                <p>Panel lateral</p>
+                    {% if data.user != null %}
+                        Usuario: {{data.user.nombre}}<br>
+                        Rol: {{data.user.tipo}}<br>
+                        <p><a href="editar_usuario.php">Editar información personal</a></p>
+                        <p><a href="logout.php">Cerrar sesión</a></p>
+                    {% else %}
+                        <p><a href="login.php">Iniciar sesión</a></p>
+                        <p><a href="register.php">Registrarse</a></p>
+                    {% endif %}
                 {% endblock %}
             </aside>
 

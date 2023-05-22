@@ -155,13 +155,26 @@ INSERT INTO ImagenBiografia(id_cientifico, enlace, descripcion) VALUES (1, 'albe
 -- Social
 INSERT INTO Social(id_cientifico, nombre, enlace) VALUES (1, "Wikipedia", "https://es.wikipedia.org/wiki/Albert_Einstein");
 
+-- TipoUsuario
+INSERT INTO TipoUsuario VALUES ('Usuario'), -- Usuario registrado
+                               ('Moderador'), -- Usuario moderador
+                               ('Gestor'), -- Usuario gestor del sitio
+                               ('Administrador'); -- Superusuario
+
 -- Usuario
-INSERT INTO Usuario(nombre, email) VALUES ('Usuario1', 'usuario1@example.com'),
-                                          ('Usuario2', 'usuario2@example.com'),
-                                          ('Usuario3', 'usuario3@example.com');
+-- CONTRASEÑAS: 
+-- Usuario1 -> contrasena1
+-- Moderador2 -> contrasena2
+-- Gestor3 -> contrasena3
+-- ElSuperUsuario -> elsuperusuario
+INSERT INTO Usuario(nombre, email, pwd) VALUES ('Usuario1', 'usuario1@example.com', '$2y$10$IJ58dJuoYY5iw9mutCj4nOklDSCH4ZeF61gef5CqfDlaOlDO1vUMm'),
+                                               ('Moderador2', 'moderador2@example.com', '$2y$10$ibkuNzKGYzsf6FKFBEw8D.ulZpgwWU8kcf8eK5f2IXgTbRGOonvi2'),
+                                               ('ElGestor3', 'gestor3@example.com', '$2y$10$mTtmyC/anf3KyKgkHgLdCOlq7X9Yipsn7xf3/6kROiGaayzzogRHG'),
+                                               ('ElSuperUsuario', 'elsuperusuario@example.com', '$2y$10$3jWXkxzJQfqJ67OYVEWI2O5veEMS.PfOC/5cjVnCabDfLL781Fz1i');
 
 -- Comentario
 INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (1, 1, "Definitivamente es un cientifico");
+
 INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2, 1, "5mentarios", CURRENT_TIMESTAMP + 1),
                                                                        (3, 1, "Pero ese no es el nombre de una plaza?", CURRENT_TIMESTAMP + 5),
                                                                        (2, 1, "Hola mundo!", CURRENT_TIMESTAMP + 10);

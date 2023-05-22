@@ -11,8 +11,10 @@
     https://github.com/lu1smgb/SIBW
 */
 
-require_once "twig_load.php";
+require_once "__twigLoad.php";
 require_once "conexion.php";
+
+session_start();
 
 $connection = new Conexion();
 $data = $connection->getIndexInfo();

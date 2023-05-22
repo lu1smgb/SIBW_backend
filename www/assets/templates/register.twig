@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+    <div id="panel-biografia">
+        <h1>Registro</h1>
+        {% for error in errors %}
+            <p style="color: #f00;">{{error}}</p>
+        {% endfor %}
+        <form action="../register.php" method="post">
+            Nombre de usuario (8-32 caracteres):<br>
+            <input type="text" name="nombre"><br>
+            Correo electrónico:<br>
+            <input type="email" name="email"><br>
+            Contraseña:<br>
+            <input type="password" name="password"><br>
+            Repita contraseña:<br>
+            <input type="password" name="repeat_pwd"><br>
+            <input type="submit" value="Registrar">
+        </form>
+    </div>
+{% endblock %}

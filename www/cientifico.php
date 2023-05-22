@@ -13,16 +13,16 @@
     
 */
 
-require "twig_load.php";
+require "__twigLoad.php";
 require "conexion.php";
 
 $id = 0;
-if (array_key_exists('id', $_GET)) {
+if (isset($_GET['id'])) {
     $id = abs((int)$_GET['id']);
 }
 
 $imprimir = false;
-if (array_key_exists('imprimir', $_GET)) {
+if (isset($_GET['imprimir'])) {
     $imprimir = $_GET['imprimir'];
     if ($imprimir == "true") {
         $imprimir = true;
@@ -32,9 +32,9 @@ if (array_key_exists('imprimir', $_GET)) {
     }
 }
 
-$connection = new Conexion();
-
+session_start();
 $data = $connection->getScientistInfo($id);
-echo $twig->render('cientifico.twig', ["id" => $id, "imprimir" => $imprimir, "data" => $data]);
+
+echo $twig->render('cientifico.twig', ["imprimir" => $imprimir, "data" => $data]);
 
 ?>
