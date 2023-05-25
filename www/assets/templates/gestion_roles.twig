@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+<div id="panel-biografia">
+    {% for error in errors %}
+        <p style="color: #f00;">{{error}}</p>
+    {% endfor %}
+    {% if data.user.tipo == 'Administrador' %}
+        <h1>Gestión de roles</h1>
+        <form action="../gestion_roles.php" method="post">
+            Usuario:<br>
+            <select name="user_id">
+                {% for usuario in data.user_list %}
+                    {% if data.user.id != usuario.id %}
+                        <option value={{ usuario.id }}>{{ usuario.tipo }} {{ usuario.nombre }} ({{ usuario.email }})</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br>
+            Rol:<br>
+            <select name="tipo">
+                {% for rol in data.roles %}
+                    <option value="{{ rol }}">{{ rol }}</option>
+                {% endfor %}
+            </select><br>
+            <input type="submit" value="Realizar cambio">
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

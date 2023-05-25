@@ -8,7 +8,7 @@ $errors = array();
 $data = array();
 
 if (!isset($_SESSION['user'])) {
-    array_push($errors, "No tienes permiso para entrar en esta página");
+    array_push($errors, "Inicie sesión antes de editar su información de usuario");
 }
 else {
 
@@ -18,13 +18,13 @@ else {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $email_ref = $data['user']['email'];
+        $user_id = $data['user']['id'];
 
-        $update_errors = $connection->updateUserInfo($email_ref, $_POST);
+        $update_errors = $connection->updateUserInfo($user_id, $_POST);
 
         if (!$update_errors) {
             // Obtenemos la información actualizada del usuario
-            $_SESSION['user'] = $connection->getUser($email_ref);
+            $_SESSION['user'] = $connection->getUserById($user_id);
             header("Location: index.php");
             exit();
         }

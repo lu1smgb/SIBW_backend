@@ -46,7 +46,17 @@
         <h2>{{ data.cientifico.nombre }}</h2>
         <h3>{{ data.cientifico.fechaNacimiento }} - {{ data.cientifico.fechaDefuncion }}</h3>
         <h4>{{ data.cientifico.lugarOrigen }}</h4>
-        <p>{{ data.cientifico.biografia }}</p> <!-- Todo el contenido queda en un parrafo? -->
+        <!-- El contenido queda en un parrafo? Quitar bloque para que el texto se considere codigo HTML? -->
+        <p>{{ data.cientifico.biografia }}</p>
+
+        {% if data.hashtags is not empty %}
+        <h5>Hashtags:</h5>
+        <ul style="list-style: none;">
+            {% for hashtag in data.hashtags %}
+                <li>#{{ hashtag.nombre }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
         <!-- Botones sociales -->
         <!-- FB, TW e Imprimir -->
@@ -56,7 +66,12 @@
             {% endfor %}
             <button type="button" onclick="location.href = '../cientifico.php?id={{ data.id }}&imprimir=true';">Imprimir</button>
             <button type="button" id="boton-comentarios"><img src="../assets/images/comentarios.gif"></button>
+            {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
+            <button type="button" id="boton-comentarios" onclick="location.href = '../editar_cientifico.php?id={{ data.id }}';"><img style="filter: invert(1);"src="../assets/images/edit.png"></button>
+            <button type="button" id="boton-comentarios" onclick="location.href = '../borrar_cientifico.php?id={{ data.id }}';"><img style="filter: invert(1);"src="../assets/images/delete.png"></button>
+            {% endif %}
         </div>
+
     </div>
 {% endblock %}
 
@@ -69,6 +84,9 @@
             <div class="comentario">
                 <strong class="nombre">{{ comentario.nombre }}</strong>
                 <strong class="fecha">{{ comentario.fecha }}</strong>
+                {% if comentario.moderado %}
+                <i>Mensaje editado por el moderador</i>
+                {% endif %}
                 <p class="texto">{{ comentario.texto }}</p>
                 {% if data.user.tipo == 'Moderador' or data.user.tipo == 'Administrador' or data.user.email == comentario.email %}
                 <div class="botones-comentarios">

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+<div id="panel-biografia">
+    {% for error in errors %}
+        <p style="color: #f00;">{{error}}</p>
+    {% endfor %}
+    {% if data.user.tipo == 'Moderador' or data.user.tipo == 'Administrador' %}
+        <h1>Lista de comentarios</h1>
+        <dl>
+        {% for comentario in data.comentarios %}
+            <br>
+            <dt>
+                <b>
+                {{ comentario.nombre_usuario }} comentó en {{ comentario.nombre_cientifico }} el {{ comentario.fecha }}:
+                </b>
+            </dt>
+            <dd>
+                <br>
+                <i>{{ comentario.texto }}</i>
+                <ul style="list-style: none">
+                    <li><a href="../editar_comentario.php?id={{ comentario.id }}">Editar</a></li>
+                    <li><a href="../borrar_comentario.php?id={{ comentario.id }}">Eliminar</a></li>
+                </ul>
+            </dd>
+        {% endfor %}
+        </dl>
+    {% endif %}
+</div>
+{% endblock %}

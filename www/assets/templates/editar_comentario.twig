@@ -11,7 +11,7 @@
             {{ data.comentario.nombre_usuario }} comentó en {{ data.comentario.nombre_cientifico }} a las {{ data.comentario.fecha }}<br>
             Contenido del comentario:<br>
             {# TODO: Añadir javascript del panel de comentarios #}
-            <textarea rows="5" cols="70" name="texto">{{ data.comentario.texto }}</textarea>
+            <textarea rows="5" cols="70" name="texto">{{ data.comentario.texto }}</textarea><br>
             <input type="submit" value="Cambiar">
         </form>
         {% endif %}

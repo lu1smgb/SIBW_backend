@@ -49,7 +49,9 @@ CREATE TABLE HashtagCientifico (
     nombre VARCHAR(100) NOT NULL,
 
     -- Un mismo cientifico no puede tener hashtags duplicados
-    PRIMARY KEY(id_cientifico, nombre)
+    PRIMARY KEY(id_cientifico, nombre),
+
+    FOREIGN KEY (id_cientifico) REFERENCES Cientifico(id)
 
 );
 
@@ -125,6 +127,7 @@ CREATE TABLE Comentario (
     id_cientifico INT NOT NULL,
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     texto TEXT NOT NULL, -- 65,535 caracteres
+    moderado BOOLEAN NOT NULL DEFAULT 0,
 
     PRIMARY KEY (id),
 

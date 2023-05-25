@@ -167,17 +167,17 @@ INSERT INTO TipoUsuario VALUES ('Usuario'), -- Usuario registrado
 -- Moderador2 -> contrasena2
 -- Gestor3 -> contrasena3
 -- ElSuperUsuario -> elsuperusuario
-INSERT INTO Usuario(nombre, email, pwd) VALUES ('Usuario1', 'usuario1@example.com', '$2y$10$IJ58dJuoYY5iw9mutCj4nOklDSCH4ZeF61gef5CqfDlaOlDO1vUMm'),
-                                               ('Moderador2', 'moderador2@example.com', '$2y$10$ibkuNzKGYzsf6FKFBEw8D.ulZpgwWU8kcf8eK5f2IXgTbRGOonvi2'),
-                                               ('ElGestor3', 'gestor3@example.com', '$2y$10$mTtmyC/anf3KyKgkHgLdCOlq7X9Yipsn7xf3/6kROiGaayzzogRHG'),
-                                               ('ElSuperUsuario', 'elsuperusuario@example.com', '$2y$10$3jWXkxzJQfqJ67OYVEWI2O5veEMS.PfOC/5cjVnCabDfLL781Fz1i');
+INSERT INTO Usuario(nombre, email, tipo, pwd) VALUES ('Usuario1', 'usuario1@example.com', 'Usuario','$2y$10$IJ58dJuoYY5iw9mutCj4nOklDSCH4ZeF61gef5CqfDlaOlDO1vUMm'),
+                                               ('Moderador2', 'moderador2@example.com', 'Moderador','$2y$10$ibkuNzKGYzsf6FKFBEw8D.ulZpgwWU8kcf8eK5f2IXgTbRGOonvi2'),
+                                               ('ElGestor3', 'gestor3@example.com', 'Gestor','$2y$10$mTtmyC/anf3KyKgkHgLdCOlq7X9Yipsn7xf3/6kROiGaayzzogRHG'),
+                                               ('ElSuperUsuario', 'elsuperusuario@example.com', 'Administrador','$2y$10$3jWXkxzJQfqJ67OYVEWI2O5veEMS.PfOC/5cjVnCabDfLL781Fz1i');
 
 -- Comentario
 INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (1, 1, "Definitivamente es un cientifico");
 
 INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2, 1, "5mentarios", CURRENT_TIMESTAMP + 1),
                                                                        (3, 1, "Pero ese no es el nombre de una plaza?", CURRENT_TIMESTAMP + 5),
-                                                                       (2, 1, "Hola mundo!", CURRENT_TIMESTAMP + 10);
+                                                                       (4, 1, "Hola mundo!", CURRENT_TIMESTAMP + 10);
 
 -- PalabraProhibida
 INSERT INTO PalabraProhibida VALUES ('tonto'),
@@ -190,3 +190,9 @@ INSERT INTO PalabraProhibida VALUES ('tonto'),
                                     ('flautas'),
                                     ('cipote'),
                                     ('cipota');
+
+-- HashtagCientifico
+INSERT INTO HashtagCientifico(id_cientifico, nombre) VALUES (1, 'relatividad'),
+                                                            (1, 'historico'),
+                                                            (2, 'física'),
+                                                            (2, 'nuclear');

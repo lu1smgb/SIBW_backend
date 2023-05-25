@@ -206,7 +206,7 @@ class Conexion
 
             // Realizamos la consulta
             // Los comentarios más recientes irán primero
-            $query = "SELECT Comentario.id, Usuario.nombre, Usuario.email, Comentario.fecha, Comentario.texto 
+            $query = "SELECT Comentario.id, Usuario.nombre, Usuario.email, Comentario.fecha, Comentario.texto, Comentario.moderado 
                       FROM Usuario INNER JOIN Comentario ON Usuario.id=Comentario.id_usuario
                       WHERE Comentario.id_cientifico=? ORDER BY Comentario.fecha DESC";
             $stm = $this->connection->prepare($query);
@@ -306,7 +306,7 @@ class Conexion
             $info['imagenes'] = $this->getScientistImages($id);
             $info['comentarios'] = $this->getScientistComments($id);
             $info['palabras'] = $this->getForbiddenWords();
-            // TODO: Conseguir los hashtags de los cientificos aqui
+            $info['hashtags'] = $this->getHashtags($id);
         }
 
         $ret = array_merge($info, $this->getCommonPageInfo());
@@ -327,12 +327,23 @@ class Conexion
 
     private function isValidPassword(string $pwd) : bool
     {
-        return preg_match("/^[a-zA-Z\d@#$%&\/\\\(\)\=\!~]{8,32}$/", $pwd);
+        return preg_match("/^[a-zA-Z\d@#$%&\/\\\(\)\=\!~_-]{8,32}$/", $pwd);
     }
 
     private function generatePasswordHash(string $pwd) : string | false
     {
         return password_hash($pwd, PASSWORD_DEFAULT);
+    }
+
+    public function checkUserRole(int $id, string $role) : bool
+    {
+        $query = "SELECT * FROM Usuario WHERE id=? AND tipo=?";
+        $smt = $this->connection->prepare($query);
+        $smt->bind_param("is", $id, $role);
+        if (!$smt->execute()) {
+            return false;
+        }
+        return ($smt->get_result()->num_rows > 0);
     }
 
     // Comprueba que el usuario con el email tiene la contraseña especificada
@@ -354,7 +365,21 @@ class Conexion
     }
 
     // Obtiene los datos del usuario a partir de su email
-    public function getUser(string $email) {
+    public function getUserById(int $id) {
+
+        $query = "SELECT id, email, nombre, tipo FROM Usuario WHERE id=?";
+        $smt = $this->connection->prepare($query);
+        $smt->bind_param("i", $id);
+        $smt->execute();
+        $res = $smt->get_result()->fetch_assoc();
+
+        $smt->close();
+
+        return $res;
+
+    }
+
+    public function getUserByEmail(string $email) {
 
         if (!$this->isValidEmail($email)) {
             return false;
@@ -365,10 +390,20 @@ class Conexion
         $smt->bind_param("s", $email);
         $smt->execute();
         $res = $smt->get_result()->fetch_assoc();
+
         $smt->close();
 
         return $res;
 
+    }
+
+    private function emailExists(string $email) : bool
+    {
+        $query = "SELECT email FROM Usuario WHERE email=?";
+        $smt = $this->connection->prepare($query);
+        $smt->bind_param("s", $email);
+        $smt->execute();
+        return $smt->get_result()->num_rows > 0;
     }
 
     private function verifyUserRegisterInput(array $data) {
@@ -405,7 +440,7 @@ class Conexion
             else {
 
                 // Comprobamos si el email existe en la BD
-                if ($this->getUser($data['email'])) {
+                if ($this->emailExists($data['email'])) {
 
                     array_push($errors, "El correo electrónico ya está en uso");
 
@@ -447,6 +482,7 @@ class Conexion
     // - nombre: Nombre del nuevo usuario, debe seguir las pautas de abajo
     // - email: Email del nuevo usuario, no debe estar presente en la BD y debe seguir las pautas de abajo
     // - password: Contraseña del nuevo usuario
+    // Los usuarios registrados por este método serán simplemente usuarios
     public function register(array $data) : array
     {
         
@@ -547,7 +583,7 @@ class Conexion
 
     }
 
-    public function updateUserInfo(string $email, array $values) : array
+    public function updateUserInfo(int $id, array $values) : array
     {
 
         $errors = array();
@@ -561,9 +597,9 @@ class Conexion
             $smt = null;
 
             if (!$update['password']) {
-                $query = "UPDATE Usuario SET nombre=?, email=? WHERE email=?";
+                $query = "UPDATE Usuario SET nombre=?, email=? WHERE id=?";
                 $smt = $this->connection->prepare($query);
-                $smt->bind_param("sss", $update['nombre'], $update['email'], $email);
+                $smt->bind_param("ssi", $update['nombre'], $update['email'], $id);
             }
             else {
                 $update['password'] = $this->generatePasswordHash($update['password']);
@@ -571,9 +607,9 @@ class Conexion
                     array_push($errors, "No se ha podido encriptar la nueva contraseña, contacte al administrador");
                     return $errors;
                 }
-                $query = "UPDATE Usuario SET nombre=?, email=?, pwd=? WHERE email=?";
+                $query = "UPDATE Usuario SET nombre=?, email=?, pwd=? WHERE id=?";
                 $smt = $this->connection->prepare($query);
-                $smt->bind_param("ssss", $update['nombre'], $update['email'], $update['password'], $email);
+                $smt->bind_param("sssi", $update['nombre'], $update['email'], $update['password'], $id);
             }
 
             if (!$smt->execute()) {
@@ -613,18 +649,19 @@ class Conexion
         return $ret;
     }
 
-    public function updateComment(int $id, string $texto) : array
+    public function updateComment(int $id, string $texto, bool $mod) : array
     {
         $errors = array();
+        $_mod = (int)$mod;
 
         if (!$texto) {
             array_push($errors, "El comentario está vacío");
         }
         else {
-            $query = "UPDATE Comentario SET texto=?, fecha=? WHERE Comentario.id = ?";
+            $query = "UPDATE Comentario SET texto=?, fecha=?, moderado=? WHERE Comentario.id = ?";
             $smt = $this->connection->prepare($query);
             $fecha_actual = date('Y-m-d H:i:s');
-            if (!$smt->bind_param("ssi", $texto, $fecha_actual, $id)) {
+            if (!$smt->bind_param("ssii", $texto, $fecha_actual, $_mod, $id)) {
                 array_push($errors, "Error interno, consulte al administrador");
             }
             else if (!$smt->execute()) {
@@ -645,6 +682,193 @@ class Conexion
         $ret = $smt->execute();
         $smt->close();
         return $ret;
+
+    }
+
+    public function getAllUsers() : array
+    {
+        $ret = array();
+        $query = "SELECT id, nombre, email, tipo FROM Usuario";
+        $smt = $this->connection->prepare($query);
+        if ($smt->execute()) {
+            $ret = $smt->get_result()->fetch_all(MYSQLI_ASSOC);
+        }
+        return $ret;
+    }
+
+    public function getRoles() : array
+    {
+        $ret = array();
+        $query = "SELECT tipo FROM TipoUsuario";
+        $smt = $this->connection->prepare($query);
+        if ($smt->execute()) {
+            $res = $smt->get_result();
+            while($row = $res->fetch_assoc()) {
+                array_push($ret, $row['tipo']);
+            }
+        }
+        $smt->close();
+        return $ret;
+    }
+
+    // Actualiza el rol de un usuario
+    // Devuelve un array con los errores producidos
+    public function setUserRole(int $id, string $role) : array
+    {
+        $errors = array();
+
+        // Tenemos que comprobar que no vamos a eliminar al unico superusuario del sistema
+        if ($role !== 'Administrador') {
+
+            $query = "SELECT id, tipo FROM Usuario WHERE tipo='Administrador'";
+            $smt = $this->connection->prepare($query);
+
+            if (!$smt->execute()) {
+
+                array_push($errors, "Se ha producido un error verificando el rol del usuario");
+
+            }
+
+            $res = $smt->get_result();
+
+            if ($smt->num_rows === 1 && $res->fetch_assoc()['id'] === $id) {
+
+                array_push($errors, "No se puede cambiar el rol del único superusuario del sistema");
+
+            }
+
+            $smt->close();
+
+        }
+
+        if (!$errors) {
+
+            $query = "UPDATE Usuario SET tipo=? WHERE id=?";
+            $smt = $this->connection->prepare($query);
+            $smt->bind_param("si", $role, $id);
+
+            if (!$smt->execute()) {
+
+                array_push($errors, "Error al actualizar el rol del usuario");
+
+            }
+
+            $smt->close();
+
+            $_SESSION['user'] = $this->getUserById($_SESSION['user']['id']);
+
+        }
+
+        return $errors;
+    }
+
+    public function getAllComments()
+    {
+
+        $ret = array();
+        $query = "SELECT Comentario.id,
+                         Usuario.nombre AS nombre_usuario,
+                         Cientifico.nombre AS nombre_cientifico,
+                         Comentario.fecha,
+                         Comentario.texto
+                         FROM Comentario
+                         INNER JOIN Cientifico ON Comentario.id_cientifico = Cientifico.id
+                         INNER JOIN Usuario ON Comentario.id_usuario = Usuario.id";
+        $smt = $this->connection->prepare($query);
+        if ($smt->execute()) {
+            $ret = $smt->get_result()->fetch_all(MYSQLI_ASSOC);
+            foreach ($ret as &$row) {
+                $row['fecha'] = $this->date_form->comment($row['fecha']);
+            }
+        }
+        return $ret;
+
+    }
+
+    public function getAllScientists($search) : array
+    {
+
+        $query = "SELECT id, nombre FROM Cientifico";
+
+        if ($search) {
+
+            $search = '%' . $search . '%';
+            $query = $query . " WHERE nombre LIKE ?";
+
+        }
+
+        $smt = $this->connection->prepare($query);
+
+        if ($search) {
+
+            $smt->bind_param("s", $search);
+
+        }
+
+        $smt->execute();
+        return $smt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    }
+
+    private function getHashtags(int $id) : array
+    {
+        $ret = array();
+        $query = "SELECT nombre FROM HashtagCientifico WHERE id_cientifico=?";
+        $smt = $this->connection->prepare($query);
+        $smt->bind_param("i", $id);
+        if ($smt->execute()) {
+            $res = $smt->get_result();
+            while ($row = $res->fetch_assoc()) {
+                array_push($ret, $row);
+            }
+        }
+        else {
+            array_push($ret, "No se han podido obtener los hashtags");
+        }
+        return $ret;
+    }
+
+    private function deleteScientistReferences(int $id) : bool
+    {
+        $tables = ['ImagenBiografia', 'Comentario', 'Social', 'HashtagCientifico'];
+        foreach ($tables as &$table) {
+            $query = "DELETE FROM " . $table . " WHERE id_cientifico=?";
+            $smt = $this->connection->prepare($query);
+            $smt->bind_param("i", $id);
+            if (!$smt->execute()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function addScientist(array $info) : array
+    {
+
+    }
+
+    public function updateScientist(int $id, array $info) : array
+    {
+        
+    }
+
+    public function deleteScientist(int $id) : bool
+    {
+        // Hay que eliminar los datos que referencian al cientifico antes de
+        // eliminarlo de la base de datos:
+        // ImagenBiografia, Comentario, Social y HashtagCientifico
+        $ret = false;
+        if ($this->deleteScientistReferences($id)) {
+            $query = "DELETE FROM Cientifico WHERE id=?";
+            $smt = $this->connection->prepare($query);
+            $smt->bind_param("i", $id);
+            $ret = $smt->execute();
+        }
+        return $ret;
+    }
+
+    public function uploadComment(int $id, array $info) : bool
+    {
 
     }
 

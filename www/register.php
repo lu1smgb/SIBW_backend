@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else {
             session_start();
-            $_SESSION['user'] = $connection->getUser($registro['email']);
+            $_SESSION['user'] = $connection->getUserByEmail($registro['email']);
             header("Location: index.php");
             exit();
         }

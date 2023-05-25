@@ -4,6 +4,8 @@ require_once "__twigLoad.php";
 
 $errors = array();
 
+session_start();
+
 // Accion a realizar cuando el usuario haya completado el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -13,9 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     if ($connection->checkLogin($email, $password)) {
-
-        session_start();
-        $_SESSION['user'] = $connection->getUser($email);
+        
+        $_SESSION['user'] = $connection->getUserByEmail($email);
 
         //! inseguro, preguntar al profesor
         header("Location: index.php");

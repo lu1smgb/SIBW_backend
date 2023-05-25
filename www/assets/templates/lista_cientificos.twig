@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block panelPrincipal %}
+    <div id="panel-biografia">
+    {% for error in errors %}
+        <p style="color: #f00;">{{error}}</p>
+    {% endfor %}
+    {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
+        <h1>Lista de científicos</h1>
+        <form action="../lista_cientificos.php" method="post">
+            <input type="search" name="search" placeholder="Búsqueda">
+        </form>
+        <ul>
+            {% for cientifico in data.cientificos %}
+                <li style="list-style: none;">
+                    [{{ cientifico.id }}] {{cientifico.nombre}}<br>
+                    <a href="../cientifico.php?id={{ cientifico.id }}">Acceder a la biografía</a><br>
+                    <a href="../editar_cientifico.php?id={{ cientifico.id }}">Editar</a><br>
+                    <a href="../borrar_cientifico.php?id={{ cientifico.id }}">Eliminar</a><br>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    </div>
+{% endblock %}
