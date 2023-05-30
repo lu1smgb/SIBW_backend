@@ -175,9 +175,9 @@ INSERT INTO Usuario(nombre, email, tipo, pwd) VALUES ('Usuario1', 'usuario1@exam
 -- Comentario
 INSERT INTO Comentario(id_usuario, id_cientifico, texto) VALUES (1, 1, "Definitivamente es un cientifico");
 
-INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2, 1, "5mentarios", CURRENT_TIMESTAMP + 1),
-                                                                       (3, 1, "Pero ese no es el nombre de una plaza?", CURRENT_TIMESTAMP + 5),
-                                                                       (4, 1, "Hola mundo!", CURRENT_TIMESTAMP + 10);
+INSERT INTO Comentario(id_usuario, id_cientifico, texto, fecha) VALUES (2, 1, "5mentarios", CURRENT_TIMESTAMP),
+                                                                       (3, 1, "Pero ese no es el nombre de una plaza?", CURRENT_TIMESTAMP),
+                                                                       (4, 1, "Hola mundo!", CURRENT_TIMESTAMP);
 
 -- PalabraProhibida
 INSERT INTO PalabraProhibida VALUES ('tonto'),

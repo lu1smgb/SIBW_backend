@@ -8,11 +8,11 @@ P4:
 
 [x] Borrar comentarios (añadir identificador a los comentarios)
 
-[~] Editar comentarios (QUEDA INCLUIR EL JAVASCRIPT PARA LA CENSURA) (sugerencia: tabla para registrar las modificaciones de los moderadores)
+[~] Editar comentarios (QUEDA INCLUIR EL JAVASCRIPT PARA LA CENSURA)
 
 [x] Listado de todos los comentarios (facil)
 
-[] Añadir cientifico (dificil)
+[~] Añadir cientifico (dificil)
 
 [] Editar cientifico (dificil)
 
@@ -32,4 +32,9 @@ P4:
 
 [x] Modificar codigo para verificar roles (funcion ya implementada) de esta forma la comprobacion se hara en la base de datos en vez de la cookie del usuario
 
-[] Implementar publicacion de comentarios
+[x] Implementar publicacion de comentarios
+
+Cosas que se quedaron por hacer de la P4:
+
+- Busqueda por hashtags ?
+- Editar cientifico

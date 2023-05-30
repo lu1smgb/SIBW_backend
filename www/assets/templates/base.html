@@ -49,6 +49,15 @@
                 {% for menu in data.menus %}
                     <button type="button" onclick="location.href = '{{menu.enlace}}';">{{ menu.nombre }}</button>
                 {% endfor %}
+                {% if data.user.tipo == 'Moderador' or data.user.tipo == 'Administrador' %}
+                    <button type="button" onclick="location.href = 'lista_comentarios.php';">Lista de comentarios</button>
+                {% endif %}
+                {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
+                    <button type="button" onclick="location.href = 'lista_cientificos.php';">Lista de cientificos</button>
+                {% endif %}
+                {% if data.user.tipo == 'Administrador' %}
+                    <button type="button" onclick="location.href = 'gestion_roles.php';">Gestion de permisos</button>
+                {% endif %}
             </nav>
 
         </header>

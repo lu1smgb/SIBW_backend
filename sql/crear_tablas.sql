@@ -127,7 +127,7 @@ CREATE TABLE Comentario (
     id_cientifico INT NOT NULL,
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     texto TEXT NOT NULL, -- 65,535 caracteres
-    moderado BOOLEAN NOT NULL DEFAULT 0,
+    moderado BOOLEAN NOT NULL DEFAULT 0, -- Deberia cambiarse por una relacion
 
     PRIMARY KEY (id),
 
@@ -147,3 +147,15 @@ CREATE TABLE PalabraProhibida (
     PRIMARY KEY (palabra)
 
 );
+
+-- RELACION EdicionComentario
+-- CREATE TABLE EdicionComentario (
+--     id_comentario INT NOT NULL,
+--     id_usuario INT NOT NULL,
+--     fecha DATE NOT NULL DEFAULT,
+    
+--     PRIMARY KEY (id_usuario, fecha),
+    
+--     FOREIGN KEY id_comentario REFERENCES Comentario(id),
+--     FOREIGN KEY id_usuario REFERENCES Usuario(id)
+-- );

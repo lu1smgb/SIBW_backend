@@ -1,18 +1,17 @@
 <?php
 
 require_once "__twigLoad.php";
+require_once "conexion.php";
 
 session_start();
 
 $errors = array();
-$data = array();
+$data = $connection->getCommonPageInfo();
 
 if (!isset($_SESSION['user'])) {
     array_push($errors, "Inicie sesión antes de editar su información de usuario");
 }
 else {
-
-    require_once "conexion.php";
 
     $data['user'] = $_SESSION['user'];
 

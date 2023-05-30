@@ -19,6 +19,12 @@ require "date_formatter.php";
 
 class Conexion
 {
+    // MAXIMO 5 MBytes
+    private const MAX_FILESIZE = 40000000;
+    // Esta ruta debe partir desde las plantillas TWIG
+    private const PHP_IMAGE_DIR = 'assets/images/';
+    private const TWIG_IMAGE_DIR = '../images/';
+    public const FRONT_IMG_FILENAME = 'default.png';
     private DateFormatter $date_form;
     private mysqli $connection;
 
@@ -88,7 +94,7 @@ class Conexion
     private function getScientist(int $id) : array | false
     {
 
-        $query = "SELECT nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia
+        $query = "SELECT id, nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia
                   FROM Cientifico WHERE id=?";
 
         $stm = $this->connection->prepare($query);
@@ -238,7 +244,7 @@ class Conexion
     }
 
     // Obtiene las palabras prohibidas para los comentarios
-    private function getForbiddenWords() : array | false
+    public function getForbiddenWords() : array | false
     {
 
         $query = "SELECT palabra FROM PalabraProhibida";
@@ -263,7 +269,7 @@ class Conexion
     }
 
     // Es importante abrir antes una cookie en la página de origen antes de llamar a esta función
-    private function getCommonPageInfo() : array
+    public function getCommonPageInfo() : array
     {
         $data = array();
         $data['user'] = (isset($_SESSION['user'])) ? $_SESSION['user'] : null;
@@ -643,8 +649,14 @@ class Conexion
                          WHERE Comentario.id = ?";
         $smt = $this->connection->prepare($query);
         $smt->bind_param("i", $id);
-        $smt->execute();
-        $ret = $smt->get_result()->fetch_assoc();
+        if ($smt->execute()) {
+            $res = $smt->get_result();
+            $ret = $res->fetch_assoc();
+            if (!$ret) { $ret = false; }
+        }
+        else {
+            $ret = false;
+        }
         $smt->close();
         return $ret;
     }
@@ -653,6 +665,8 @@ class Conexion
     {
         $errors = array();
         $_mod = (int)$mod;
+        if ($_mod < 0) { $_mod = 0; }
+        else if ($_mod > 1) { $_mod = 1; }
 
         if (!$texto) {
             array_push($errors, "El comentario está vacío");
@@ -660,8 +674,8 @@ class Conexion
         else {
             $query = "UPDATE Comentario SET texto=?, fecha=?, moderado=? WHERE Comentario.id = ?";
             $smt = $this->connection->prepare($query);
-            $fecha_actual = date('Y-m-d H:i:s');
-            if (!$smt->bind_param("ssii", $texto, $fecha_actual, $_mod, $id)) {
+            $date = date('Y-m-d H:i:s');
+            if (!$smt->bind_param("ssii", $texto, $date, $_mod, $id)) {
                 array_push($errors, "Error interno, consulte al administrador");
             }
             else if (!$smt->execute()) {
@@ -844,12 +858,138 @@ class Conexion
 
     public function addScientist(array $info) : array
     {
+        $errors = array();
 
+        echo var_dump($info);
+
+        if (!$info['nombre']) {
+            array_push($errors, "No se ha especificado un nombre");
+        }
+        
+        if (!$info['fechaNacimiento']) {
+            array_push($errors, "No se ha especificado una fecha de nacimiento");
+        }
+
+        if (!$info['lugarOrigen']) {
+            array_push($errors, "No se ha especificado un lugar de origen");
+        }
+
+        if (!$info['biografia']) {
+            array_push($errors, "La biografia está vacía");
+        }
+
+        if (!$errors) {
+
+            // Primero insertamos el cientifico
+            $query = "INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia)
+            VALUES (?, ?, ?, ?, ?)";
+            $smt = $this->connection->prepare($query);
+            $smt->bind_param("sssss", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia']);
+
+            if (!$smt->execute()) {
+                array_push($errors, "No se ha podido insertar el cientifico en la base de datos");
+            }
+            else {
+
+                $id = $this->connection->insert_id;
+
+                // Redes sociales
+                if ($info['sociales'] != null) {
+                    $query = "INSERT INTO Social(id_cientifico, nombre, enlace) VALUES (?, ?, ?)";
+                    $smt = $this->connection->prepare($query);
+
+                    foreach ($info['sociales'] as $nombre => $enlace) {
+
+                        $smt->bind_param("iss", $id, $nombre, $enlace);
+                        if (!$smt->execute()) {
+                            array_push($errors, "No se ha podido insertar la red social " . $nombre);
+                        }
+
+                    }
+                }
+
+                // Hashtags
+                if ($info['hashtags'] != null) {
+
+                    $query = "INSERT INTO HashtagCientifico VALUES (?, ?)";
+                    $smt = $this->connection->prepare($query);
+
+                    foreach ($info['hashtags'] as $nombre) {
+
+                        $smt->bind_param("is", $id, $nombre);
+                        if (!$smt->execute()) {
+                            array_push($errors, "No se ha podido insertar el hashtag #" . $nombre);
+                        }
+
+                    }
+
+                }
+
+                // Portada
+                if ($info['portada'] != null) {
+
+                    $filename = $info['portada']['filename'];
+                    $query = "INSERT INTO Imagen(enlace) VALUES (?)";
+                    $smt = $this->connection->prepare($query);
+                    $smt->bind_param("s", $filename);
+
+                    $query = "UPDATE Cientifico SET portada=? WHERE id=?";
+                    $smt = $this->connection->prepare($query);
+                    $smt->bind_param("si", $filename, $id);
+                    if (!$smt->execute()) {
+                        array_push($errors, "No se ha podido establecer la portada del cientifico");
+                    }
+
+                }
+
+                // Imagenes
+                if ($info['imagenes'] != null) {
+
+                    foreach ($info['imagenes'] as $idx => $img) {
+                        
+                        $query = "INSERT INTO Imagen VALUES (?)";
+                        $smt = $this->connection->prepare($query);
+                        $smt->bind_param("s", $img['filename']);
+                        $smt->execute();
+
+                        //? Se me olvidaron los pies de página :'(
+                        $query = "INSERT INTO ImagenBiografia(id_cientifico, enlace, descripcion) VALUES (?, ?, ?)";
+                        $smt = $this->connection->prepare($query);
+                        echo var_dump($img);
+                        $smt->bind_param("iss", $id, $img['filename'], $img['desc']);
+                        if (!$smt->execute()) {
+                            array_push($errors, "No se ha podido incluir la imagen número " . $idx . " en la biografía (está repetida)");
+                        }
+
+                    }
+
+                }
+
+                if ($errors) {
+
+                    array_unshift($errors, "El cientifico se ha insertado, pero han ocurrido los siguientes errores:");
+
+                }
+
+            }
+
+        }
+
+        return $errors;
     }
 
     public function updateScientist(int $id, array $info) : array
     {
-        
+        $errors = [];
+        $query = "UPDATE Cientifico SET nombre=?, fechaNacimiento=?, fechaDefuncion=?, lugarOrigen=?, biografia=?
+                  WHERE id=?";
+
+        $smt = $this->connection->prepare($query);
+        $smt->bind_param("sssssi", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia'], $id);
+        if (!$smt->execute()) {
+            array_push($errors, "Error en actualizacion");
+        }
+        return $errors;
     }
 
     public function deleteScientist(int $id) : bool
@@ -867,9 +1007,38 @@ class Conexion
         return $ret;
     }
 
-    public function uploadComment(int $id, array $info) : bool
+    public function uploadComment(int $id_user, int $id_scientist, string $text) : bool
     {
+        $query = "INSERT INTO Comentario(id_usuario, id_cientifico, fecha, texto)
+                  VALUES (?, ?, ?, ?)";
+        $smt = $this->connection->prepare($query);
+        $date = date('Y-m-d H:i:s');
+        $smt->bind_param("iiss", $id_user, $id_scientist, $date, $text);
+        return $smt->execute();
+    }
 
+    public function hasValidImageExtension(string &$filename)
+    {
+        $valid_extensions = array("jpeg", "jpg", "png");
+        $file_ext = explode('.',$filename);
+        $file_ext = end($file_ext);
+        $file_ext = strtolower($file_ext);
+        return in_array($file_ext, $valid_extensions);
+    }
+
+    public function hasValidImageSize(int $filesize) {
+        return $filesize <= Conexion::MAX_FILESIZE;
+    }
+
+    public function uploadImage(string $tmp_name, string $final_name) : string | false
+    {
+        $storage_dir = Conexion::PHP_IMAGE_DIR . $final_name;
+        return move_uploaded_file($tmp_name, $storage_dir);
+    }
+
+    public function defaultFrontImageLocation() : string
+    {
+        return Conexion::TWIG_IMAGE_DIR . 'default.png';
     }
 
     public function __destruct()

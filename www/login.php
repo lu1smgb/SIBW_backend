@@ -1,15 +1,16 @@
 <?php
 
 require_once "__twigLoad.php";
+require_once "conexion.php";
 
 $errors = array();
 
 session_start();
 
+$data = $connection->getCommonPageInfo();
+
 // Accion a realizar cuando el usuario haya completado el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    require_once "conexion.php";
 
     $email = $_POST['email'];
     $password = $_POST['password'];

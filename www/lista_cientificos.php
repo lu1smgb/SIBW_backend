@@ -5,7 +5,7 @@ require_once "conexion.php";
 
 session_start();
 
-$data = array();
+$data = $connection->getCommonPageInfo();
 $errors = array();
 
 if (isset($_SESSION['user']) && ($_SESSION['user']['tipo'] === 'Gestor' || $_SESSION['user']['tipo'] === 'Administrador')) {

@@ -3,7 +3,7 @@
 require_once "__twigLoad.php";
 require_once "conexion.php";
 
-$data = array();
+$data = $connection->getCommonPageInfo();
 $errors = array();
 
 session_start();

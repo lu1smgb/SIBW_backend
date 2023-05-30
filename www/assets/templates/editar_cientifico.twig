@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script src="../assets/js/FormularioCientifico.js" defer></script>
+{% endblock %}
+
+{% block panelPrincipal %}
+
+<div id="panel-biografia">
+    <h1 style="color: #ff8800">Página en desarrollo</h1>
+    {% for error in errors %}
+        <p style="color: #f00;">{{error}}</p>
+    {% endfor %}
+    {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
+        <h1>Editar científico</h1>
+        <form action="index.php" enctype="multipart/form-data" method="get">
+            <strong>Nombre:</strong><br>
+            <input type="text" name="nombre" value="{{ data.cientifico.nombre }}"><br>
+
+            <strong>Fecha de nacimiento:</strong><br>
+            <input type="date" name="fechaNacimiento" value="{{ data.cientifico.fechaNacimiento }}"><br>
+
+            <strong>Fecha de defunción</strong> (marcar si procede):
+            <input id="haFallecido" type="checkbox" name="haFallecido"> <br>
+            <input id="fechaDefuncion" style="display: none;" type="date" name="fechaDefuncion" value="{{ data.cientifico.fechaDefuncion }}"><br>
+
+            <strong>Lugar de origen:</strong><br>
+            <input id="lugarOrigen" type="text" name="lugarOrigen" value="{{ data.cientifico.lugarOrigen }}"><br>
+
+            <strong>Biografía:</strong><br>
+            <textarea rows='10' cols='50' name="biografia">{{ data.cientifico.biografia }}</textarea><br>
+
+            <strong>Redes sociales:</strong>
+            <button id="aniadirSocial">Añadir</button><br>
+            Los campos consisten en el nombre y el enlace, respectivamente<br>
+            <ul style="list-style: none; padding: 0;" id="tablaSociales">
+                {# <li>
+                    <input type="text" name="nombre-social[0]">
+                    <input type="url" name="enlace-social[0]">
+                </li> #}
+                {% for social in data.sociales %}
+                    <li>
+                        <input type="text" name="nombre-social[{{ loop.index0 }}]" value="{{ social.nombre }}">
+                        <input type="url" name="enlace-social[{{ loop.index0 }}]" value="{{ social.enlace }}">
+                    </li>
+                {% endfor %}
+            </ul><br>
+
+            <strong>Hashtags</strong> (no hace falta incluir #):
+            <button id="aniadirHashtag">Añadir</button>
+            <ul style="list-style: none; padding: 0;" id="tablaHashtags">
+                {# <li><input type="text" name="nombre-hashtag[0]"></li> #}
+                {% for hashtag in data.hashtags %}
+                    <li><input type="text" name="nombre-hashtag[{{ loop.index0 }}]" value="{{ hashtag.nombre }}"></li>
+                {% endfor %}
+            </ul><br>
+
+            --- <i>Hasta aqui llego :/</i>  ---<br>
+
+            <strong>Portada:</strong><br>
+            Extensiones válidas: JPEG, JPG y PNG<br>
+            Tamaño máximo de la imagen: 5MB<br>
+            <input type="file" name="portada-cientifico"><br>
+            
+            <strong>Tabla de imágenes:</strong>
+            <button id="aniadirImagen">Añadir</button><br>
+            Puedes añadir una breve descripción en cada imagen
+            <ul style="list-style: none; padding: 0;" id="tablaImagenes">
+                {# <li><input type="file" name="imagen-cientifico[0]"></li> #}
+            </ul><br>
+
+            <input type="submit" value="Registrar"> <b style="color:#ff8800"> <-- ir al inicio </b>
+
+        </form>
+    {% endif %}
+</div>
+
+{% endblock %}

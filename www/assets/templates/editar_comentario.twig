@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+    <script type="text/javascript">
+        const banned = {{ data.palabras | json_encode | raw }};
+    </script>
+    <script src="../assets/js/EditarComentario.js" defer></script>
+{% endblock %}
+
 {% block panelPrincipal %}
     <div id="panel-biografia">
         {% for error in errors %}
@@ -11,7 +18,7 @@
             {{ data.comentario.nombre_usuario }} comentó en {{ data.comentario.nombre_cientifico }} a las {{ data.comentario.fecha }}<br>
             Contenido del comentario:<br>
             {# TODO: Añadir javascript del panel de comentarios #}
-            <textarea rows="5" cols="70" name="texto">{{ data.comentario.texto }}</textarea><br>
+            <textarea rows="5" cols="70" name="texto" id="textarea">{{ data.comentario.texto }}</textarea><br>
             <input type="submit" value="Cambiar">
         </form>
         {% endif %}

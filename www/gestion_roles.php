@@ -4,9 +4,10 @@ require_once "__twigLoad.php";
 require_once "conexion.php";
 
 $errors = array();
-$data = array();
 
 session_start();
+
+$data = $connection->getCommonPageInfo();
 
 if (isset($_SESSION['user'])) {
 

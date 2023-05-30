@@ -33,6 +33,13 @@
     <!-- Panel de cientificos -->
     <div id="panel-biografia">
 
+        <!--Barra de busqueda-->
+        {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
+        <form action="../lista_cientificos.php" method="post">
+            <input type="search" name="search" placeholder="Búsqueda">
+        </form>
+        {% endif %}
+
         <!-- Imagenes adjuntas a la biografia -->
         <div class="pila-imagenes">
             {% for imagen in data.imagenes %}
@@ -47,7 +54,7 @@
         <h3>{{ data.cientifico.fechaNacimiento }} - {{ data.cientifico.fechaDefuncion }}</h3>
         <h4>{{ data.cientifico.lugarOrigen }}</h4>
         <!-- El contenido queda en un parrafo? Quitar bloque para que el texto se considere codigo HTML? -->
-        <p>{{ data.cientifico.biografia }}</p>
+        {{ data.cientifico.biografia }}
 
         {% if data.hashtags is not empty %}
         <h5>Hashtags:</h5>
@@ -101,14 +108,14 @@
             </div> 
             {% endfor %}
         </div>
-        <form id="form-comentarios" name="form-comentarios" method="post">
-            <strong>Publica tu comentario</strong>
-            <div id="nombre-email">
-                <input type="text" name="nombre" placeholder="Nombre (8-32 caracteres)">
-                <input type="email" name="email" placeholder="Email">
-            </div>
-            <textarea name="texto" placeholder="Escribe aquí..."></textarea>
-            <input type="submit" value="Enviar">
+        <form id="form-comentarios" name="form-comentarios" action="publicar_comentario.php?id={{ data.cientifico.id }}" method="post">
+            {% if data.user is not empty %}
+                <strong>Publica tu comentario</strong>
+                <textarea name="texto" placeholder="Escribe aquí..."></textarea>
+                <input type="submit" value="Enviar">
+            {% else %}
+                <strong>Inicia sesión para publicar comentarios</strong>
+            {% endif %}
         </form>
     </div>
 {% endblock %}
