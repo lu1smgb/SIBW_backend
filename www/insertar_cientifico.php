@@ -67,6 +67,8 @@ if (isset($_SESSION['user'])) {
             // HASHTAGS / ETIQUETAS
             $data['formulario']['hashtags'] = !empty($_POST['nombre-hashtag']) ? $_POST['nombre-hashtag'] : null;
 
+            $data['formulario']['visibilidad'] = $_POST['visibilidad'] == 'visible' ? 1 : 0;
+
             // PORTADA DEL CIENTIFICO
             $data['formulario']['portada'] = null;
 

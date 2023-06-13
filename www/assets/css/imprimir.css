@@ -87,3 +87,8 @@
 #panel-comentarios {
     display:none;
 }
+
+#seccionBusqueda {
+    display: none;
+    visibility: hidden;
+}

@@ -28,7 +28,7 @@ INSERT INTO Imagen VALUES ('default.png'),
 -- INSERT INTO Imagen(enlace, descripcion) VALUES ('...', '...');
 
 -- Cientifico
-INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia, portada) VALUES (
+INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia, portada, publicado) VALUES (
     'Albert Einstein',
     STR_TO_DATE('14/03/1879', '%d/%m/%Y'),
     STR_TO_DATE('18/04/1955', '%d/%m/%Y'),
@@ -47,7 +47,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     Estudios Avanzados de Princeton hasta su muerte en 1955.
     Además de su trabajo científico, Einstein también fue un activista político y pacifista, abogando por la paz mundial y los derechos 
     civiles. Su imagen icónica y su legado científico lo convierten en uno de los personajes más reconocidos de la historia moderna.',
-    'albert_einstein.jpg'
+    'albert_einstein.jpg',
+    1
 ),
 (
     'Marie Curie',
@@ -62,7 +63,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     Marie se convirtió en la primera mujer en enseñar en la Sorbona y continuó sus investigaciones en el campo 
     de la radiactividad. En 1911 recibió su segundo Premio Nobel, esta vez en química, por su descubrimiento del radio y el polonio. 
     Marie Curie falleció el 4 de julio de 1934 en Francia debido a una anemia aplásica causada por su exposición prolongada a la radiación.',
-    'marie_curie.jpg'
+    'marie_curie.jpg',
+    1
 ),
 (
     'Nikola Tesla',
@@ -74,7 +76,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     Tesla emigró a los Estados Unidos en 1884, donde trabajó con Thomas Edison antes de fundar su propia compañía en 1887. 
     A lo largo de su vida, Tesla registró más de 300 patentes por sus invenciones en campos que van desde la energía eléctrica hasta la 
     robótica y la teledirigencia. Falleció el 7 de enero de 1943 en Nueva York.',
-    'nikola_tesla.jpeg'
+    'nikola_tesla.jpeg',
+    1
 ),
 (
     'Stephen Hawking',
@@ -88,7 +91,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     A pesar de sus limitaciones físicas, continuó trabajando y enseñando en la Universidad de Cambridge y 
     publicó varios libros populares sobre su trabajo, incluyendo "Una breve historia del tiempo". 
     Hawking falleció el 14 de marzo de 2018 a los 76 años.',
-    'stephen_hawking.jpg'
+    'stephen_hawking.jpg',
+    1
 ),
 (
     'Alan Turing',
@@ -104,7 +108,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     Turing falleció a los 41 años, aparentemente por suicidio. En 2009, el entonces primer ministro británico, 
     Gordon Brown, emitió una disculpa oficial en nombre del gobierno británico por 
     la forma en que Turing fue tratado después de la guerra.',
-    'alan_turing.jpg'
+    'alan_turing.jpg',
+    1
 ),
 (
     'Louis Pasteur',
@@ -117,7 +122,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     descomposición de alimentos y bebidas. También creó la primera vacuna contra la rabia en 1885, basada 
     en sus estudios de la enfermedad. Pasteur fue un pionero en la teoría de los gérmenes y la higiene, 
     y sus investigaciones sentaron las bases de la microbiología moderna. Murió en Saint-Cloud, Francia, el 28 de septiembre de 1895.',
-    'louis_pasteur.jpg'
+    'louis_pasteur.jpg',
+    1
 ),
 (
     'Isaac Newton',
@@ -129,7 +135,8 @@ INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, bio
     su obra más importante, "Philosophiæ Naturalis Principia Mathematica", donde presentó sus leyes del movimiento y la 
     ley de la gravitación universal. También fue presidente de la Royal Society y realizó importantes contribuciones en 
     óptica y cálculo diferencial. Newton murió en Londres el 31 de marzo de 1727.',
-    'isaac_newton.jpg'
+    'isaac_newton.jpg',
+    1
 );
 
 

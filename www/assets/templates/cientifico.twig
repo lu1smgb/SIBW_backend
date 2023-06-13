@@ -27,6 +27,8 @@
         const banned = {{ data.palabras | json_encode | raw }};
     </script>
     <script src="../assets/js/PanelComentarios.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../assets/js/BarraBusqueda.js"></script>
 {% endblock %}
 
 {% block panelPrincipal %}
@@ -34,11 +36,13 @@
     <div id="panel-biografia">
 
         <!--Barra de busqueda-->
-        {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
-        <form action="../lista_cientificos.php" method="post">
-            <input type="search" name="search" placeholder="Búsqueda">
+        <form action="../lista_cientificos.php" method="post" id="seccionBusqueda">
+            <input type="search" id="search" name="search" placeholder="Búsqueda">
+            <div id="resultadoBusqueda">
+                <ul>
+                </ul>
+            </div>
         </form>
-        {% endif %}
 
         <!-- Imagenes adjuntas a la biografia -->
         <div class="pila-imagenes">

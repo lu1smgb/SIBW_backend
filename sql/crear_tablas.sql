@@ -32,6 +32,7 @@ CREATE TABLE Cientifico (
     lugarOrigen VARCHAR(100) NOT NULL,
     biografia TEXT, -- 65,535 caracteres
     portada VARCHAR(150),
+    publicado BOOLEAN NOT NULL DEFAULT 0,
 
     PRIMARY KEY (id), -- No puede haber dos cientificos con el mismo id
 

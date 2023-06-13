@@ -7,8 +7,12 @@
     {% endfor %}
     {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
         <h1>Lista de científicos</h1>
-        <form action="../lista_cientificos.php" method="post">
-            <input type="search" name="search" placeholder="Búsqueda">
+        <form action="../lista_cientificos.php" method="post" id="seccionBusqueda">
+            <input type="search" id="search" name="search" placeholder="Búsqueda">
+            <div id="resultadoBusqueda">
+                <ul>
+                </ul>
+            </div>
         </form>
         <a href="../insertar_cientifico.php">Insertar nuevo cientifico</a>
         <ul>
@@ -24,4 +28,8 @@
         </ul>
     {% endif %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="../assets/js/BarraBusqueda.js"></script>
 {% endblock %}

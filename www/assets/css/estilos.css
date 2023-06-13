@@ -519,6 +519,15 @@ button {
     padding:1ch;
 }
 
+#resultadoBusqueda {
+    display: none;
+}
+
+#resultadoBusqueda > ul {
+    padding-left: 0;
+    list-style: none;
+}
+
 /*************************************************** -------------------- ***************************************************/
 
 

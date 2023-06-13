@@ -28,8 +28,6 @@ class Conexion
     private DateFormatter $date_form;
     private mysqli $connection;
 
-    // todo: prepare --- methods bind_param execute get_result close 
-
     public function __construct()
     {
         $this->date_form = new DateFormatter();
@@ -45,7 +43,7 @@ class Conexion
     private function getMenu() : array | false
     {
 
-        $query = "SELECT id, nombre, portada FROM Cientifico";
+        $query = "SELECT id, nombre, portada FROM Cientifico WHERE publicado = 1";
         $res = $this->connection->query($query);
 
         $ret = array();
@@ -94,7 +92,7 @@ class Conexion
     private function getScientist(int $id) : array | false
     {
 
-        $query = "SELECT id, nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia
+        $query = "SELECT id, nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia, publicado
                   FROM Cientifico WHERE id=?";
 
         $stm = $this->connection->prepare($query);
@@ -799,15 +797,21 @@ class Conexion
 
     }
 
-    public function getAllScientists($search) : array
+    public function getAllScientists($search, $solo_publicados = false) : array
     {
 
-        $query = "SELECT id, nombre FROM Cientifico";
+        $query = "SELECT DISTINCT id, nombre FROM Cientifico";
 
         if ($search) {
 
             $search = '%' . $search . '%';
             $query = $query . " WHERE nombre LIKE ?";
+
+            if ($solo_publicados) {
+
+                $query = $query . " AND publicado = 1";
+
+            }
 
         }
 
@@ -878,13 +882,17 @@ class Conexion
             array_push($errors, "La biografia está vacía");
         }
 
+        if (!$info['visibilidad']) {
+            $info['visibilidad'] = 0;
+        }
+
         if (!$errors) {
 
             // Primero insertamos el cientifico
-            $query = "INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia)
-            VALUES (?, ?, ?, ?, ?)";
+            $query = "INSERT INTO Cientifico(nombre, fechaNacimiento, fechaDefuncion, lugarOrigen, biografia, publicado)
+            VALUES (?, ?, ?, ?, ?, ?)";
             $smt = $this->connection->prepare($query);
-            $smt->bind_param("sssss", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia']);
+            $smt->bind_param("sssssi", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia'], $info['visibilidad']);
 
             if (!$smt->execute()) {
                 array_push($errors, "No se ha podido insertar el cientifico en la base de datos");
@@ -981,11 +989,11 @@ class Conexion
     public function updateScientist(int $id, array $info) : array
     {
         $errors = [];
-        $query = "UPDATE Cientifico SET nombre=?, fechaNacimiento=?, fechaDefuncion=?, lugarOrigen=?, biografia=?
+        $query = "UPDATE Cientifico SET nombre=?, fechaNacimiento=?, fechaDefuncion=?, lugarOrigen=?, biografia=?, publicado=?
                   WHERE id=?";
 
         $smt = $this->connection->prepare($query);
-        $smt->bind_param("sssssi", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia'], $id);
+        $smt->bind_param("sssssii", $info['nombre'], $info['fechaNacimiento'], $info['fechaDefuncion'], $info['lugarOrigen'], $info['biografia'], $info['visibilidad'], $id);
         if (!$smt->execute()) {
             array_push($errors, "Error en actualizacion");
         }

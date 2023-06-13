@@ -8,12 +8,13 @@
 
 <div id="panel-biografia">
     <h1 style="color: #ff8800">Página en desarrollo</h1>
+    <p style="color: #ff8800">No se pueden actualizar las imágenes</p>
     {% for error in errors %}
         <p style="color: #f00;">{{error}}</p>
     {% endfor %}
     {% if data.user.tipo == 'Gestor' or data.user.tipo == 'Administrador' %}
         <h1>Editar científico</h1>
-        <form action="index.php" enctype="multipart/form-data" method="get">
+        <form action="editar_cientifico.php?id={{ data.cientifico.id }}" enctype="multipart/form-data" method="post">
             <strong>Nombre:</strong><br>
             <input type="text" name="nombre" value="{{ data.cientifico.nombre }}"><br>
 
@@ -55,7 +56,9 @@
                 {% endfor %}
             </ul><br>
 
-            --- <i>Hasta aqui llego :/</i>  ---<br>
+            <strong>Visibilidad:</strong>
+            Si marca esta casilla, la biografía será visible al público.
+            <input type="checkbox" name="visibilidad" value="visible" {% if data.cientifico.publicado %} checked {% endif %}><br>
 
             <strong>Portada:</strong><br>
             Extensiones válidas: JPEG, JPG y PNG<br>
@@ -69,7 +72,7 @@
                 {# <li><input type="file" name="imagen-cientifico[0]"></li> #}
             </ul><br>
 
-            <input type="submit" value="Registrar"> <b style="color:#ff8800"> <-- ir al inicio </b>
+            <input type="submit" value="Confirmar cambios"> <b style="color:#ff8800"></b>
 
         </form>
     {% endif %}
